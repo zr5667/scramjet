@@ -5,16 +5,18 @@ RUN npm i -g pnpm@9.15.9
 
 WORKDIR /app
 
-# Copy lockfiles and application configuration files
-COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
-COPY . .
+# Copy package configurations
+COPY package.json pnpm-lock.yaml* ./
 
 # Install dependencies allowing lockfile modifications
 RUN pnpm install --no-frozen-lockfile
 
-# Railway routes traffic using the PORT environment variable
+# Copy the rest of the application files
+COPY . .
+
+# Railway routes traffic using the PORT environment variable automatically
 ENV PORT=8080
 EXPOSE 8080
 
-# Execute the main Javascript wrapper directly bypassing pnpm's CLI engine
-CMD ["node", "src/index.js"]
+# Execute the start script defined in the repository's package.json
+CMD ["pnpm", "start"]
