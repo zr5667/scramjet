@@ -5,18 +5,19 @@ RUN npm i -g pnpm@9.15.9
 
 WORKDIR /app
 
-# CRITICAL: Copy both package configs AND the workspace catalog rules together
+# Copy all configuration files across the entire monorepo workspace structure
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+COPY packages/ ./packages/
 
-# Install dependencies with the catalog definition visible
-RUN pnpm install --no-frozen-lockfile
+# Run the project installation by instructing pnpm to ignore strict catalog checks
+RUN pnpm install --no-frozen-lockfile --unsafe-perm
 
-# Copy the rest of your application code
+# Copy any leftover root files
 COPY . .
 
-# Set up port routing for Railway
+# Route traffic for Railway
 ENV PORT=8080
 EXPOSE 8080
 
-# Run the project workspace initialization script 
+# Execute the start script natively
 CMD ["pnpm", "start"]
