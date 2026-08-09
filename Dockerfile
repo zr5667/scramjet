@@ -5,18 +5,18 @@ RUN npm i -g pnpm@9.15.9
 
 WORKDIR /app
 
-# Copy package configurations
-COPY package.json pnpm-lock.yaml* ./
+# CRITICAL: Copy both package configs AND the workspace catalog rules together
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 
-# Install dependencies allowing lockfile modifications
+# Install dependencies with the catalog definition visible
 RUN pnpm install --no-frozen-lockfile
 
-# Copy the rest of the application files
+# Copy the rest of your application code
 COPY . .
 
-# Railway routes traffic using the PORT environment variable automatically
+# Set up port routing for Railway
 ENV PORT=8080
 EXPOSE 8080
 
-# Execute the start script defined in the repository's package.json
+# Run the project workspace initialization script 
 CMD ["pnpm", "start"]
