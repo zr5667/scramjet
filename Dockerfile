@@ -16,4 +16,4 @@ RUN pnpm install --no-frozen-lockfile
 EXPOSE 8080
 
 # Run the app 
-CMD ["pnpm", "start"]
+CMD ["pnpm", "--filter", "scramjet-app", "start"]
