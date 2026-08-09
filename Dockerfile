@@ -1,19 +1,22 @@
 FROM node:20-slim
 
-# Install pnpm version 9 explicitly
+# Install pnpm 9 explicitly
 RUN npm i -g pnpm@9
 
 WORKDIR /app
 
-# Copy all repository workspace configuration files
+# Copy configuration files
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 COPY . .
 
-# Install all workspace dependencies
+# Run the installation allowing inline lockfile updates
 RUN pnpm install --no-frozen-lockfile
 
-# Expose the standard Railway network port
+# Expose the network port for Railway
 EXPOSE 8080
 
-# Run the app 
-CMD ["pnpm", "--filter", "scramjet-app", "start"]
+# Move directly into the specific application workspace folder to launch
+WORKDIR /app/packages/scramjet-app
+
+# Execute the start script natively from within its home directory
+CMD ["pnpm", "start"]
