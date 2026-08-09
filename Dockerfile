@@ -10,7 +10,7 @@ COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 COPY . .
 
 # Install all workspace dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Expose the standard Railway network port
 EXPOSE 8080
