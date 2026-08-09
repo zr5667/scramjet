@@ -1,22 +1,20 @@
 FROM node:20-slim
 
 # Install pnpm 9 explicitly
-RUN npm i -g pnpm@9
+RUN npm i -g pnpm@9.15.9
 
 WORKDIR /app
 
-# Copy configuration files
+# Copy lockfiles and application configuration files
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 COPY . .
 
-# Run the installation allowing inline lockfile updates
+# Install dependencies allowing lockfile modifications
 RUN pnpm install --no-frozen-lockfile
 
-# Expose the network port for Railway
+# Railway routes traffic using the PORT environment variable
+ENV PORT=8080
 EXPOSE 8080
 
-# Move directly into the specific application workspace folder to launch
-WORKDIR /app/packages/scramjet-app
-
-# Execute the start script natively from within its home directory
-CMD ["pnpm", "start"]
+# Execute the main Javascript wrapper directly bypassing pnpm's CLI engine
+CMD ["node", "src/index.js"]
