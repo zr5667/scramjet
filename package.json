@@ -1,3 +1,8 @@
+"scripts": {
+    "dev": "...",
+    "start": "pnpm --filter scramjet-app start",
+    "build": "pnpm --filter scramjet-app build"
+}
 {
 	"name": "scramjet-root",
 	"version": "1.0.0",
